@@ -11,14 +11,21 @@ import UIKit
 class GalleryViewController: UIViewController {
 
     lazy var dataSource = DataSourceBuilder.sample()
+    lazy var throttler = SearchThrottler()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //
     }
 
-    func reloadDataSource(withSearch string: String?) {
-        print("\(string ?? "empty")")
+    func updateDataSource(withSearch string: String?) {
+        
+        let text = string ?? "empty"
+        print("\(text)")
+        
+        throttler.execute {
+            print("reload with \(text)")
+        }
     }
     
     func didSelectItem(atIndex index: Int) {
@@ -33,7 +40,6 @@ extension GalleryViewController: UICollectionViewDataSource {
         
         return dataSource.count
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
@@ -62,14 +68,14 @@ extension GalleryViewController: UITextFieldDelegate {
         let text = textField.text as NSString?
         let value = text?.replacingCharacters(in: range, with: string)
         
-        reloadDataSource(withSearch: value)
+        updateDataSource(withSearch: value)
         
         return true
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         
-        reloadDataSource(withSearch: nil)
+        updateDataSource(withSearch: nil)
         
         return true
     }

@@ -11,6 +11,7 @@
 		7C18AA3F1EAA875000C6B103 /* SampleDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18AA3E1EAA875000C6B103 /* SampleDataSource.swift */; };
 		7C18AA411EAA8EB100C6B103 /* GalleryDataSourceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18AA401EAA8EB100C6B103 /* GalleryDataSourceProtocol.swift */; };
 		7C18AA431EAA919B00C6B103 /* DataSourceBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18AA421EAA919B00C6B103 /* DataSourceBuilder.swift */; };
+		7C18AA451EAA9FC000C6B103 /* SearchThrottler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18AA441EAA9FC000C6B103 /* SearchThrottler.swift */; };
 		7C369E061EAA523B0080C5FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C369E051EAA523B0080C5FB /* AppDelegate.swift */; };
 		7C369E081EAA523B0080C5FB /* GalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C369E071EAA523B0080C5FB /* GalleryViewController.swift */; };
 		7C369E0B1EAA523B0080C5FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C369E091EAA523B0080C5FB /* Main.storyboard */; };
@@ -24,6 +25,7 @@
 		7C18AA3E1EAA875000C6B103 /* SampleDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleDataSource.swift; sourceTree = "<group>"; };
 		7C18AA401EAA8EB100C6B103 /* GalleryDataSourceProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryDataSourceProtocol.swift; sourceTree = "<group>"; };
 		7C18AA421EAA919B00C6B103 /* DataSourceBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataSourceBuilder.swift; sourceTree = "<group>"; };
+		7C18AA441EAA9FC000C6B103 /* SearchThrottler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchThrottler.swift; sourceTree = "<group>"; };
 		7C369E021EAA523B0080C5FB /* Gallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C369E051EAA523B0080C5FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C369E071EAA523B0080C5FB /* GalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryViewController.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				7C18AA401EAA8EB100C6B103 /* GalleryDataSourceProtocol.swift */,
 				7C18AA3E1EAA875000C6B103 /* SampleDataSource.swift */,
 				7C18AA421EAA919B00C6B103 /* DataSourceBuilder.swift */,
+				7C18AA441EAA9FC000C6B103 /* SearchThrottler.swift */,
 				7C369E091EAA523B0080C5FB /* Main.storyboard */,
 				7C369E0C1EAA523B0080C5FB /* Assets.xcassets */,
 				7C369E0E1EAA523B0080C5FB /* LaunchScreen.storyboard */,
@@ -230,6 +233,7 @@
 				7C369E081EAA523B0080C5FB /* GalleryViewController.swift in Sources */,
 				7C18AA411EAA8EB100C6B103 /* GalleryDataSourceProtocol.swift in Sources */,
 				7C369E061EAA523B0080C5FB /* AppDelegate.swift in Sources */,
+				7C18AA451EAA9FC000C6B103 /* SearchThrottler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
