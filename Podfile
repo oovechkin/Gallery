@@ -6,5 +6,6 @@ target 'Gallery' do
   use_frameworks!
 
   # Pods for Gallery
-
+  pod 'Alamofire'
+  
 end
