@@ -81,10 +81,46 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Flickr Gallery" id="yfd-Uy-nbh"/>
+                    <connections>
+                        <segue destination="Dtq-wk-XAv" kind="show" identifier="ShowDetails" id="XFm-I2-lB6"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1024.8" y="790.25487256371821"/>
+        </scene>
+        <!--Details-->
+        <scene sceneID="D8z-O4-nPR">
+            <objects>
+                <viewController storyboardIdentifier="DetailsViewController" id="Dtq-wk-XAv" customClass="DetailsViewController" customModule="Gallery" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Mz0-yP-NBa"/>
+                        <viewControllerLayoutGuide type="bottom" id="Z5E-Ex-f5c"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2i5-2c-7Ir">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CsL-dH-lbr">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="CsL-dH-lbr" secondAttribute="trailing" id="QZb-2b-Khg"/>
+                            <constraint firstItem="CsL-dH-lbr" firstAttribute="leading" secondItem="2i5-2c-7Ir" secondAttribute="leading" id="Zkp-Da-qv3"/>
+                            <constraint firstItem="Z5E-Ex-f5c" firstAttribute="top" secondItem="CsL-dH-lbr" secondAttribute="bottom" id="aKu-1d-0bH"/>
+                            <constraint firstItem="CsL-dH-lbr" firstAttribute="top" secondItem="Mz0-yP-NBa" secondAttribute="bottom" id="qZj-Wg-08Z"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Details" id="DEv-1Q-lyV"/>
+                    <connections>
+                        <outlet property="imageView" destination="CsL-dH-lbr" id="tdm-Tf-x8a"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Sf1-n1-zlP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1838" y="790"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="3Q4-Eu-FQi">

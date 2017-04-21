@@ -29,7 +29,11 @@ class GalleryViewController: UIViewController {
     }
     
     func didSelectItem(atIndex index: Int) {
-        print("item selected \(index)")
+        
+        let item = dataSource[index]
+        if let vc = DetailsViewController.instance(withItem: item, storyboard: self.storyboard) {
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 }
 
