@@ -20,11 +20,14 @@ class GalleryViewController: UIViewController {
         //
     }
 
-    func updateDataSource(withSearch string: String?) {
+    func updateDataSource(withTag tag: String?) {
         
-        let text = string ?? "empty"
+        let tag = tag ?? "empty"
         throttler.execute {
-            print("reload with \(text)")
+            print("reload with \(tag)")
+            FlickrService.searchPhotos(withTag: tag, completion: { (json) in
+                print("\(json ?? "error")")
+            })
         }
     }
     
@@ -100,14 +103,14 @@ extension GalleryViewController: UITextFieldDelegate {
         let text = textField.text as NSString?
         let value = text?.replacingCharacters(in: range, with: string)
         
-        updateDataSource(withSearch: value)
+        updateDataSource(withTag: value)
         
         return true
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         
-        updateDataSource(withSearch: nil)
+        updateDataSource(withTag: nil)
         
         return true
     }

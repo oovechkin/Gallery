@@ -18,6 +18,7 @@ class SampleDataSource {
         func asyncThumbnail(_ completion: @escaping (UIImage?) -> ()) {
             asyncImage (completion)
         }
+        
         func asyncImage(_ completion: @escaping (UIImage?) -> ()) {
             let image = UIImage(named: name)
             completion(image)
