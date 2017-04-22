@@ -30,6 +30,8 @@ class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //
-        imageView.image = item?.image
+        item?.asyncImage { [weak self] (image) in
+            self?.imageView.image = image
+        }
     }
 }

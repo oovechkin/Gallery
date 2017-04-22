@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Flickr Gallery-->
+        <!--Gallery-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="GalleryViewController" customModule="Gallery" customModuleProvider="target" sceneMemberID="viewController">
@@ -80,7 +80,7 @@
                             <constraint firstItem="XBg-wc-McU" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="xnQ-Pl-P9G"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Flickr Gallery" id="yfd-Uy-nbh"/>
+                    <navigationItem key="navigationItem" title="Gallery" id="yfd-Uy-nbh"/>
                     <connections>
                         <outlet property="textField" destination="XBg-wc-McU" id="GW9-jJ-rMZ"/>
                         <segue destination="Dtq-wk-XAv" kind="show" identifier="ShowDetails" id="XFm-I2-lB6"/>

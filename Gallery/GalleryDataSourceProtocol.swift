@@ -9,7 +9,8 @@
 import UIKit
 
 protocol GalleryItem {
-    var image: UIImage? { get }
+    func asyncThumbnail(_ completion: @escaping (UIImage?) -> ())
+    func asyncImage(_ completion: @escaping (UIImage?) -> ())
 }
 
 protocol GalleryDataSourceProtocol {

@@ -10,7 +10,7 @@ import Foundation
 
 class DataSourceBuilder {
     
-    class func sample() -> GalleryDataSourceProtocol {
+    class func sample() -> SampleDataSource {
         return SampleDataSource()
     }
 }

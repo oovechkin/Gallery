@@ -59,7 +59,9 @@ extension GalleryViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GalleryCell.reuseIdentifier, for: indexPath) as! GalleryCell
         
         let item = dataSource[indexPath.row]
-        cell.imageView.image = item.image
+        item.asyncThumbnail { (image) in
+            cell.imageView.image = image
+        }
         
         return cell
     }
