@@ -65,6 +65,23 @@ extension GalleryViewController: UICollectionViewDelegate {
 }
 
 
+extension GalleryViewController : UICollectionViewDelegateFlowLayout {
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        let itemsPerRow: CGFloat = 3
+        let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        let spacing: CGFloat = 10
+        
+        let padding = insets.left + insets.right + (itemsPerRow-1) * spacing
+        let availableWidth = collectionView.bounds.size.width - padding
+        let width = availableWidth / itemsPerRow
+        
+        return CGSize(width: width, height: width)
+    }
+}
+
+
 extension GalleryViewController: UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
