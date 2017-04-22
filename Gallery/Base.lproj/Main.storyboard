@@ -31,7 +31,7 @@
                                 </connections>
                             </textField>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Q6t-gS-7XT">
-                                <rect key="frame" x="16" y="107" width="343" height="555"/>
+                                <rect key="frame" x="16" y="110" width="343" height="552"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="U8N-YW-hNE">
                                     <size key="itemSize" width="100" height="100"/>
@@ -74,7 +74,7 @@
                             <constraint firstItem="Q6t-gS-7XT" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="0Wb-FJ-bdm"/>
                             <constraint firstItem="XBg-wc-McU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Nee-Ks-jBF"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Q6t-gS-7XT" secondAttribute="trailing" id="P1N-V5-W8D"/>
-                            <constraint firstItem="Q6t-gS-7XT" firstAttribute="top" secondItem="XBg-wc-McU" secondAttribute="bottom" constant="5" id="PLn-P9-d3t"/>
+                            <constraint firstItem="Q6t-gS-7XT" firstAttribute="top" secondItem="XBg-wc-McU" secondAttribute="bottom" constant="8" id="PLn-P9-d3t"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Q6t-gS-7XT" secondAttribute="bottom" constant="5" id="Q1C-ES-zdc"/>
                             <constraint firstItem="XBg-wc-McU" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="WBf-pJ-3Fl"/>
                             <constraint firstItem="XBg-wc-McU" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="xnQ-Pl-P9G"/>
@@ -82,6 +82,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Flickr Gallery" id="yfd-Uy-nbh"/>
                     <connections>
+                        <outlet property="textField" destination="XBg-wc-McU" id="GW9-jJ-rMZ"/>
                         <segue destination="Dtq-wk-XAv" kind="show" identifier="ShowDetails" id="XFm-I2-lB6"/>
                     </connections>
                 </viewController>

@@ -13,6 +13,8 @@ class GalleryViewController: UIViewController {
     lazy var dataSource = DataSourceBuilder.sample()
     lazy var throttler = SearchThrottler()
     
+    @IBOutlet weak var textField: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //
@@ -21,8 +23,6 @@ class GalleryViewController: UIViewController {
     func updateDataSource(withSearch string: String?) {
         
         let text = string ?? "empty"
-        print("\(text)")
-        
         throttler.execute {
             print("reload with \(text)")
         }
@@ -32,7 +32,17 @@ class GalleryViewController: UIViewController {
         
         let item = dataSource[index]
         if let vc = DetailsViewController.instance(withItem: item, storyboard: self.storyboard) {
-            self.navigationController?.pushViewController(vc, animated: true)
+            let presenter = {
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            if textField.isFirstResponder {
+                view.endEditing(true)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
+                    presenter()
+                })
+            } else {
+                presenter()
+            }
         }
     }
 }
@@ -41,7 +51,6 @@ class GalleryViewController: UIViewController {
 extension GalleryViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         return dataSource.count
     }
     
