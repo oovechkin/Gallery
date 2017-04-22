@@ -11,13 +11,18 @@ import Alamofire
 
 class FlickrService {
     
+    enum Error: Swift.Error {
+        case success
+        case failed(String)
+    }
+    
     class URLBuilder {
     
         private static let base = "https://api.flickr.com/services/rest"
         private static let apiKey = "78de43f3fa99194cdf401536d9934362"
         private static let photosPerPage = 20
         
-        private class func buildURL(_ method: String, params: Dictionary<String, String>) -> URL? {
+        private class func buildURL(_ method: String, params: Dictionary<String, String>) throws -> URL {
         
             var query = ""
             let append = { (field: String, value: String) in
@@ -33,44 +38,53 @@ class FlickrService {
                 append(field, value)
             }
             guard let url = URL(string: base+query) else {
-                return nil
+                throw Error.failed("Fails to build an URL from string: \(base+query)")
             }
             return url
         }
         
-        class func searchPhotos(withTag tag: String) -> URL? {
+        class func searchPhotos(withTag tag: String) throws -> URL {
             
             guard let escapedTag = tag.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) else {
-                return nil
+                throw Error.failed("Fails to apply percent encoding to tag: \(tag)")
             }
-            return buildURL("flickr.photos.search", params: [
+            return try buildURL("flickr.photos.search", params: [
                 "text": escapedTag,
                 "per_page": String(photosPerPage),
                 ])
         }
         
-        class func image(withId id: String, farm: String, server: String, secret: String) -> URL? {
+        class func getImage(withId id: String, farm: String, server: String, secret: String) throws -> URL {
             
             let string = "http://farm\(farm).static.flickr.com/\(server)/\(id)_\(secret)_s.jpg"
             guard let url = URL(string: string) else {
-                return nil
+                throw Error.failed("Fails to build an URL from string: \(string)")
             }
             return url
         }
     }
     
-    class func searchPhotos(withTag tag: String, completion: @escaping (Any?)->()) {
+    typealias Completion = (Any?, Error?)->()
+    
+    class func searchPhotos(withTag tag: String, completion: @escaping Completion) {
      
-        guard let url = URLBuilder.searchPhotos(withTag: tag) else {
-            completion(nil)
-            return
-        }
-        Alamofire.request(url).validate().responseJSON { response in
-            guard let json = response.result.value else {
-                completion(nil)
-                return
+        do {
+            let url = try URLBuilder.searchPhotos(withTag: tag)
+            Alamofire.request(url).validate().responseJSON { response in
+                if let error = response.error {
+                    completion(nil, Error.failed(error.localizedDescription))
+                    return
+                }
+                guard let json = response.result.value else {
+                    completion(nil, Error.failed("Failed to parse JSON from: \(response.result)"))
+                    return
+                }
+                completion(json, nil)
             }
-            completion(json)
+        } catch (let error as Error) {
+            completion(nil, error)
+        } catch {
+            completion(nil, Error.failed("Unknown error"))
         }
     }
 }
