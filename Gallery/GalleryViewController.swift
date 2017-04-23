@@ -25,11 +25,11 @@ class GalleryViewController: UIViewController {
         let tag = tag ?? "empty"
         throttler.execute {
             print("reload with '\(tag)'")
-            FlickrService.searchPhotos(withTag: tag, completion: { (json, error) in
-                if let error = error {
-                    print("error: \(String(describing:error))")
-                } else if let json = json {
-                    print("\(json)")
+            FlickrService.searchPhotos(withTag: tag, completion: { (photos, error) in
+                if let error = error, case FlickrService.Error.failed(let message) = error {
+                    print("error: \(message))")
+                } else if let photos = photos {
+                    print("\(photos.count)")
                 }
             })
         }
