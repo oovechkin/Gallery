@@ -7,5 +7,6 @@ target 'Gallery' do
 
   # Pods for Gallery
   pod 'Alamofire'
+  pod 'Unbox'
   
 end
