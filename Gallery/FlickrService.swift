@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import AlamofireImage
 import Unbox
 
 
@@ -57,6 +58,34 @@ extension FlickrResponse: Unboxable {
 }
 
 
+enum FlickrPhotoSize: String {
+    // s	small square 75x75
+    case smallSquare = "s"
+    // q	large square 150x150
+    case largeSquare = "q"
+    // t	thumbnail, 100 on longest side
+    case thumbnail = "t"
+    // m	small, 240 on longest side
+    case small240 = "m"
+    // n	small, 320 on longest side
+    case small320 = "n"
+    // -	medium, 500 on longest side
+    case medium500 = "-"
+    // z	medium 640, 640 on longest side
+    case medium640 = "z"
+    // c	medium 800, 800 on longest side†
+    case medium800 = "c"
+    // b	large, 1024 on longest side*
+    case large1024 = "b"
+    // h	large 1600, 1600 on longest side†
+    case large1600 = "h"
+    // k	large 2048, 2048 on longest side†
+    case large2048 = "k"
+    // o	original image, either a jpg, gif or png, depending on source format
+    case original = "o"
+}
+
+
 class FlickrService {
     
     enum Error: Swift.Error {
@@ -91,20 +120,21 @@ class FlickrService {
             return url
         }
         
-        class func searchPhotos(withTag tag: String) throws -> URL {
+        class func searchPhotos(withQuery query: String) throws -> URL {
             
-            guard let escapedTag = tag.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) else {
-                throw Error.failed("Fails to apply percent encoding to tag: \(tag)")
+            guard let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) else {
+                throw Error.failed("Fails to apply percent encoding to query: \(query)")
             }
             return try buildURL("flickr.photos.search", params: [
-                "text": escapedTag,
+                "text": escapedQuery,
                 "per_page": String(photosPerPage),
                 ])
         }
         
-        class func getImage(withId id: String, farm: String, server: String, secret: String) throws -> URL {
+        class func getImage(withSize size: FlickrPhotoSize, id: String, farm: String, server: String, secret: String) throws -> URL {
             
-            let string = "http://farm\(farm).static.flickr.com/\(server)/\(id)_\(secret)_s.jpg"
+            let extention = "jpg"
+            let string = "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret)_\(size.rawValue).\(extention)"
             guard let url = URL(string: string) else {
                 throw Error.failed("Fails to build an URL from string: \(string)")
             }
@@ -116,19 +146,19 @@ class FlickrService {
 
 extension FlickrService {
     
-    typealias Completion = ([FlickrPhoto]?, Error?)->()
+    typealias SearchCompletion = ([FlickrPhoto]?, Error?)->()
     
-    class func searchPhotos(withTag tag: String, completion: @escaping Completion) {
+    class func searchPhotos(withQuery query: String, completion: @escaping SearchCompletion) {
         
         do {
-            let url = try URLBuilder.searchPhotos(withTag: tag)
+            let url = try URLBuilder.searchPhotos(withQuery: query)
             Alamofire.request(url).validate().responseJSON { response in
                 if let error = response.error {
                     completion(nil, Error.failed(error.localizedDescription))
                     return
                 }
                 guard let json = response.result.value else {
-                    completion(nil, Error.failed("Failed to parse JSON from: \(response.result)"))
+                    completion(nil, Error.failed("Failed to parse JSON from: \(url)"))
                     return
                 }
                 parseSearchPhotos(json: json, completion: completion)
@@ -140,7 +170,7 @@ extension FlickrService {
         }
     }
     
-    class func parseSearchPhotos(json: Any, completion: @escaping Completion) {
+    class func parseSearchPhotos(json: Any, completion: @escaping SearchCompletion) {
         
         do {
             let response: FlickrResponse = try unbox(dictionary: json as! UnboxableDictionary)
@@ -154,6 +184,34 @@ extension FlickrService {
             
         } catch (let error as UnboxError) {
             completion(nil, Error.failed(error.localizedDescription))
+        } catch {
+            completion(nil, Error.failed("Unknown error"))
+        }
+    }
+}
+
+
+extension FlickrService {
+    
+    typealias GetImageCompletion = (UIImage?, Error?)->()
+
+    class func getImage(withPhoto photo: FlickrPhoto, size: FlickrPhotoSize, completion: @escaping GetImageCompletion) {
+        
+        do {
+            let url = try URLBuilder.getImage(withSize: size, id: photo.id, farm: photo.farm, server: photo.server, secret: photo.secret)
+            Alamofire.request(url).validate().responseImage(completionHandler: { response in
+                if let error = response.error {
+                    completion(nil, Error.failed(error.localizedDescription))
+                    return
+                }
+                guard let image = response.result.value else {
+                    completion(nil, Error.failed("Failed to load image from: \(url)"))
+                    return
+                }
+                completion(image, nil)
+            })
+        } catch (let error as Error) {
+            completion(nil, error)
         } catch {
             completion(nil, Error.failed("Unknown error"))
         }
