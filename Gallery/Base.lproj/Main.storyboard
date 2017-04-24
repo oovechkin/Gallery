@@ -105,23 +105,37 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CsL-dH-lbr">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DEk-TJ-WxV">
+                                <rect key="frame" x="0.0" y="627" width="375" height="40"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="40" id="IJV-ly-4dQ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="DEk-TJ-WxV" firstAttribute="leading" secondItem="2i5-2c-7Ir" secondAttribute="leading" id="Key-tD-Rmj"/>
                             <constraint firstAttribute="trailing" secondItem="CsL-dH-lbr" secondAttribute="trailing" id="QZb-2b-Khg"/>
                             <constraint firstItem="CsL-dH-lbr" firstAttribute="leading" secondItem="2i5-2c-7Ir" secondAttribute="leading" id="Zkp-Da-qv3"/>
                             <constraint firstItem="Z5E-Ex-f5c" firstAttribute="top" secondItem="CsL-dH-lbr" secondAttribute="bottom" id="aKu-1d-0bH"/>
+                            <constraint firstItem="Z5E-Ex-f5c" firstAttribute="top" secondItem="DEk-TJ-WxV" secondAttribute="bottom" id="ejf-ys-vnh"/>
                             <constraint firstItem="CsL-dH-lbr" firstAttribute="top" secondItem="Mz0-yP-NBa" secondAttribute="bottom" id="qZj-Wg-08Z"/>
+                            <constraint firstItem="DEk-TJ-WxV" firstAttribute="trailing" secondItem="2i5-2c-7Ir" secondAttribute="trailing" id="t9m-xv-dWv"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Details" id="DEv-1Q-lyV"/>
                     <connections>
                         <outlet property="imageView" destination="CsL-dH-lbr" id="tdm-Tf-x8a"/>
+                        <outlet property="titleLabel" destination="DEk-TJ-WxV" id="TVn-k0-IUb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sf1-n1-zlP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1838" y="790"/>
+            <point key="canvasLocation" x="1837.5999999999999" y="789.35532233883066"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="3Q4-Eu-FQi">

@@ -8,11 +8,13 @@
 
 import UIKit
 
+
 class DetailsViewController: UIViewController {
     
     var item: GalleryItem? = nil
     
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
     
     private class var identifier: String {
         return String(describing: self)
@@ -30,8 +32,9 @@ class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //
-        item?.asyncImage { [weak self] (image) in
+        item?.getLargeImage { [weak self] (image) in
             self?.imageView.image = image
         }
+        titleLabel.text = item?.title
     }
 }
