@@ -15,4 +15,8 @@ class GalleryCell: UICollectionViewCell {
     class var reuseIdentifier: String {
         return String(describing: self)
     }
+    
+    override func prepareForReuse() {
+        imageView.image = nil
+    }
 }

@@ -8,36 +8,65 @@
 
 import UIKit
 
+
 class GalleryViewController: UIViewController {
 
-    lazy var dataSource = DataSourceBuilder.sample()
+    var dataSource: GalleryDataSourceProtocol? = nil
+
+    // use one of providers: Sample or Flickr
+    lazy var dataProvider = DataProviderBuilder.flickr()
+    //lazy var dataProvider = DataProviderBuilder.sample()
+    
     lazy var throttler = SearchThrottler()
     
     @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //
+        prepopulate()
+    }
+    
+    func setLoadingOn(_ loading: Bool) {
+        
+        if loading {
+            activityIndicator.startAnimating()
+        } else {
+            activityIndicator.stopAnimating()
+        }
+    }
+    
+    func prepopulate() {
+        update(withQuery: dataProvider.defaultQuery)
     }
 
-    func updateDataSource(withTag tag: String?) {
+    func throttleUpdate(withQuery query: String) {
         
-        let tag = tag ?? "empty"
         throttler.execute {
-            print("reload with '\(tag)'")
-            FlickrService.searchPhotos(withTag: tag, completion: { (photos, error) in
-                if let error = error, case FlickrService.Error.failed(let message) = error {
-                    print("error: \(message))")
-                } else if let photos = photos {
-                    print("\(photos.count)")
-                }
-            })
+            self.update(withQuery: query)
         }
+    }
+    
+    func update(withQuery query: String) {
+        
+        print("updating with '\(query)'...")
+
+        self.setLoadingOn(true)
+        self.dataSource = nil
+        self.collectionView.reloadData()
+        
+        self.dataProvider.searchPhotos(withQuery: query, completion: { (dataSource) in
+            self.dataSource = dataSource
+            self.collectionView.reloadData()
+            self.setLoadingOn(false)
+        })
     }
     
     func didSelectItem(atIndex index: Int) {
         
-        let item = dataSource[index]
+        let item = dataSource![index]
         if let vc = DetailsViewController.instance(withItem: item, storyboard: self.storyboard) {
             let presenter = {
                 self.navigationController?.pushViewController(vc, animated: true)
@@ -58,6 +87,10 @@ class GalleryViewController: UIViewController {
 extension GalleryViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        guard let dataSource = dataSource else {
+            return 0
+        }
         return dataSource.count
     }
     
@@ -65,9 +98,9 @@ extension GalleryViewController: UICollectionViewDataSource {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GalleryCell.reuseIdentifier, for: indexPath) as! GalleryCell
         
-        let item = dataSource[indexPath.row]
-        item.asyncThumbnail { (image) in
-            cell.imageView.image = image
+        let item = dataSource![indexPath.row]
+        item.getThumbnail { [weak cell] (image) in
+            cell?.imageView.image = image
         }
         
         return cell
@@ -105,16 +138,16 @@ extension GalleryViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         let text = textField.text as NSString?
-        let value = text?.replacingCharacters(in: range, with: string)
+        let query = text?.replacingCharacters(in: range, with: string) ?? ""
         
-        updateDataSource(withTag: value)
+        throttleUpdate(withQuery: query)
         
         return true
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         
-        updateDataSource(withTag: nil)
+        throttleUpdate(withQuery: "")
         
         return true
     }
