@@ -28,8 +28,9 @@ struct FlickrItem: GalleryItem {
     
     private func getImage(withSize size: FlickrPhotoSize, completion: @escaping (UIImage?) -> ()) {
         
-        FlickrService.getImage(withPhoto: photo, size: size, completion: { (image, error) in
-            if let error = error, case FlickrService.Error.failed(let message) = error {
+        FlickrService.getImage(withPhoto: photo, size: size, completion: { (image, result) in
+            
+            if let result = result, case FlickrService.Result.failed(let message) = result {
                 
                 // TODO: show alert message
                 print("error: \(message))")
@@ -56,9 +57,9 @@ class FlickrDataProvider: GalleryDataProvider {
     
     override func searchPhotos(withQuery query: String, completion: @escaping (DataSource?)->()) {
         
-        FlickrService.searchPhotos(withQuery: query.lowercased(), completion: { (photos, error) in
+        FlickrService.searchPhotos(withQuery: query.lowercased(), completion: { (photos, result) in
             
-            if let error = error, case FlickrService.Error.failed(let message) = error {
+            if let result = result, case FlickrService.Result.failed(let message) = result {
                 
                 // TODO: show alert message
                 print("error: \(message))")

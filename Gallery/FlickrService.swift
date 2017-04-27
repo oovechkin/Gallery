@@ -88,7 +88,7 @@ enum FlickrPhotoSize: String {
 
 class FlickrService {
     
-    enum Error: Swift.Error {
+    enum Result: Swift.Error {
         case success
         case failed(String)
     }
@@ -115,7 +115,7 @@ class FlickrService {
                 append(field, value)
             }
             guard let url = URL(string: base+query) else {
-                throw Error.failed("Fails to build an URL from string: \(base+query)")
+                throw Result.failed("Fails to build an URL from string: \(base+query)")
             }
             return url
         }
@@ -123,7 +123,7 @@ class FlickrService {
         class func searchPhotos(withQuery query: String) throws -> URL {
             
             guard let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.alphanumerics) else {
-                throw Error.failed("Fails to apply percent encoding to query: \(query)")
+                throw Result.failed("Fails to apply percent encoding to query: \(query)")
             }
             return try buildURL("flickr.photos.search", params: [
                 "text": escapedQuery,
@@ -136,7 +136,7 @@ class FlickrService {
             let extention = "jpg"
             let string = "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret)_\(size.rawValue).\(extention)"
             guard let url = URL(string: string) else {
-                throw Error.failed("Fails to build an URL from string: \(string)")
+                throw Result.failed("Fails to build an URL from string: \(string)")
             }
             return url
         }
@@ -146,7 +146,7 @@ class FlickrService {
 
 extension FlickrService {
     
-    typealias SearchCompletion = ([FlickrPhoto]?, Error?)->()
+    typealias SearchCompletion = ([FlickrPhoto]?, Result?)->()
     
     class func searchPhotos(withQuery query: String, completion: @escaping SearchCompletion) {
         
@@ -154,19 +154,19 @@ extension FlickrService {
             let url = try URLBuilder.searchPhotos(withQuery: query)
             Alamofire.request(url).validate().responseJSON { response in
                 if let error = response.error {
-                    completion(nil, Error.failed(error.localizedDescription))
+                    completion(nil, Result.failed(error.localizedDescription))
                     return
                 }
                 guard let json = response.result.value else {
-                    completion(nil, Error.failed("Failed to parse JSON from: \(url)"))
+                    completion(nil, Result.failed("Failed to parse JSON from: \(url)"))
                     return
                 }
                 parseSearchPhotos(json: json, completion: completion)
             }
-        } catch (let error as Error) {
-            completion(nil, error)
+        } catch (let result as Result) {
+            completion(nil, result)
         } catch {
-            completion(nil, Error.failed("Unknown error"))
+            completion(nil, Result.failed("Unknown error"))
         }
     }
     
@@ -179,13 +179,13 @@ extension FlickrService {
                 completion(response.photoContainer?.photos, nil)
             default:
                 let message = response.message ?? "Unknown error"
-                completion(nil, Error.failed(message))
+                completion(nil, Result.failed(message))
             }
             
         } catch (let error as UnboxError) {
-            completion(nil, Error.failed(error.localizedDescription))
+            completion(nil, Result.failed(error.localizedDescription))
         } catch {
-            completion(nil, Error.failed("Unknown error"))
+            completion(nil, Result.failed("Unknown error"))
         }
     }
 }
@@ -201,19 +201,19 @@ extension FlickrService {
             let url = try URLBuilder.getImage(withSize: size, id: photo.id, farm: photo.farm, server: photo.server, secret: photo.secret)
             Alamofire.request(url).validate().responseImage(completionHandler: { response in
                 if let error = response.error {
-                    completion(nil, Error.failed(error.localizedDescription))
+                    completion(nil, Result.failed(error.localizedDescription))
                     return
                 }
                 guard let image = response.result.value else {
-                    completion(nil, Error.failed("Failed to load image from: \(url)"))
+                    completion(nil, Result.failed("Failed to load image from: \(url)"))
                     return
                 }
                 completion(image, nil)
             })
-        } catch (let error as Error) {
-            completion(nil, error)
+        } catch (let result as Result) {
+            completion(nil, result)
         } catch {
-            completion(nil, Error.failed("Unknown error"))
+            completion(nil, Result.failed("Unknown error"))
         }
     }
 }

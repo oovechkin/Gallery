@@ -53,9 +53,9 @@ class GalleryViewController: UIViewController {
         
         print("updating with '\(query)'...")
 
-        self.setLoadingOn(true)
-        self.dataSource = nil
-        self.collectionView.reloadData()
+        setLoadingOn(true)
+        dataSource = nil
+        collectionView.reloadData()
         
         self.dataProvider.searchPhotos(withQuery: query, completion: { (dataSource) in
             self.dataSource = dataSource
@@ -67,7 +67,7 @@ class GalleryViewController: UIViewController {
     func didSelectItem(atIndex index: Int) {
         
         let item = dataSource![index]
-        if let vc = DetailsViewController.instance(withItem: item, storyboard: self.storyboard) {
+        if let vc = DetailsViewController.instance(withItem: item, storyboard: storyboard) {
             let presenter = {
                 self.navigationController?.pushViewController(vc, animated: true)
             }
